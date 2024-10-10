@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Resources\OilResource;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\OilRequest;
+use App\Models\Oil;
 
 class OilController extends Controller
 {
@@ -13,7 +14,7 @@ class OilController extends Controller
      */
     public function index()
     {
-        return OilResource::collection(auth()->user()->oils);
+        return OilResource::collection(Oil::all());
     }
 
     /**
@@ -31,15 +32,15 @@ class OilController extends Controller
      */
     public function show(string $uuid)
     {
-        return new OilResource(auth()->user()->oils()->where('uuid', $uuid)->firstOrFail());
+        return new OilResource(Oil::firstOrFail($uuid));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(OilRequest $request, string $id)
+    public function update(OilRequest $request, string $uuid)
     {
-        $oil = auth()->user()->oils()->where('uuid', $id)->firstOrFail();
+        $oil = Oil::firstOrFail($uuid);
 
         $oil->update($request->validated());
 
@@ -51,7 +52,7 @@ class OilController extends Controller
      */
     public function destroy(string $uuid)
     {
-        $oil = auth()->user()->oils()->where('uuid', $uuid)->firstOrFail();
+        $oil = Oil::firstOrFail($uuid);
 
         $oil->delete();
 

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\WaterRequest;
 use App\Http\Resources\WaterResource;
+use App\Models\Water;
 
 class WaterController extends Controller
 {
@@ -13,7 +14,7 @@ class WaterController extends Controller
      */
     public function index()
     {
-        return WaterResource::collection(auth()->user()->waters);
+        return WaterResource::collection(Water::all());
     }
 
     /**
@@ -31,7 +32,7 @@ class WaterController extends Controller
      */
     public function show(string $uuid)
     {
-        return new WaterResource(auth()->user()->waters()->where('uuid', $uuid)->firstOrFail());
+        return new WaterResource(Water::firstOrFail($uuid));
     }
 
     /**
@@ -39,7 +40,7 @@ class WaterController extends Controller
      */
     public function update(WaterRequest $request, string $uuid)
     {
-        $water = auth()->user()->waters()->where('uuid', $uuid)->firstOrFail();
+        $water = Water::firstOrFail($uuid);
 
         $water->update($request->validated());
 
@@ -51,7 +52,7 @@ class WaterController extends Controller
      */
     public function destroy(string $uuid)
     {
-        $water = auth()->user()->waters()->where('uuid', $uuid)->firstOrFail();
+        $water = Water::firstOrFail($uuid);
 
         $water->delete();
 

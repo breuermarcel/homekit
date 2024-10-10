@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Resources\GasResource;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\GasRequest;
+use App\Models\Gas;
 
 class GasController extends Controller
 {
@@ -13,7 +14,7 @@ class GasController extends Controller
      */
     public function index()
     {
-        return GasResource::collection(auth()->user()->gases);
+        return GasResource::collection(Gas::all());
     }
 
     /**
@@ -31,15 +32,15 @@ class GasController extends Controller
      */
     public function show(string $uuid)
     {
-        return new GasResource(auth()->user()->gases()->where('uuid', $uuid)->firstOrFail());
+        return new GasResource(Gas::findOrFail($uuid));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(GasRequest $request, string $id)
+    public function update(GasRequest $request, string $uuid)
     {
-        $gas = auth()->user()->gases()->where('uuid', $id)->firstOrFail();
+        $gas = Gas::firstOrFail($uuid);
 
         $gas->update($request->validated());
 
@@ -51,7 +52,7 @@ class GasController extends Controller
      */
     public function destroy(string $uuid)
     {
-        $gas = auth()->user()->gases()->where('uuid', $uuid)->firstOrFail();
+        $gas = Gas::firstOrFail($uuid);
 
         $gas->delete();
 

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ElectricityRequest;
 use App\Http\Resources\ElectricityResource;
+use App\Models\Electricity;
 
 class ElectricityController extends Controller
 {
@@ -13,7 +14,7 @@ class ElectricityController extends Controller
      */
     public function index()
     {
-        return ElectricityResource::collection(auth()->user()->electricities);
+        return ElectricityResource::collection(Electricity::all());
     }
 
     /**
@@ -31,7 +32,7 @@ class ElectricityController extends Controller
      */
     public function show(string $uuid)
     {
-        return new ElectricityResource(auth()->user()->electricities()->where('uuid', $uuid)->firstOrFail());
+        return new ElectricityResource(Electricity::firstOrFail($uuid));
     }
 
     /**
@@ -39,7 +40,7 @@ class ElectricityController extends Controller
      */
     public function update(ElectricityRequest $request, string $uuid)
     {
-        $electricity = auth()->user()->electricities()->where('uuid', $uuid)->firstOrFail();
+        $electricity = Electricity::firstOrFail($uuid);
 
         $electricity->update($request->validated());
 
@@ -51,7 +52,7 @@ class ElectricityController extends Controller
      */
     public function destroy(string $uuid)
     {
-        $electricity = auth()->user()->electricities()->where('uuid', $uuid)->firstOrFail();
+        $electricity = Electricity::firstOrFail($uuid);
 
         $electricity->delete();
 

@@ -48,7 +48,7 @@ class Oil extends Model
     protected function casts(): array
     {
         return [
-            'amound' => 'float',
+            'amount' => 'float',
         ];
     }
 
