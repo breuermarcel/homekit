@@ -13,9 +13,9 @@ class UserSeeder extends Seeder
     public function run(): void
     {
         \App\Models\User::create([
-            'name' => 'Marcel Breuer',
-            'email' => 'breuer.marcel@outlook.com',
-            'password' => bcrypt('password'),
+            'name' => env("SEEDER_USER_NAME"),
+            'email' => env("SEEDER_USER_EMAIL"),
+            'password' => bcrypt(env("SEEDER_USER_PASSWORD")),
         ]);
     }
 }
